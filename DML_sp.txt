@@ -1,0 +1,186 @@
+create table Customers
+(
+    CustomerID   int auto_increment
+        primary key,
+    CustomerName varchar(255) not null,
+    ContactName  varchar(255) null,
+    Address      varchar(255) null,
+    City         varchar(100) null,
+    PostalCode   varchar(20)  null,
+    Country      varchar(100) null
+);
+
+create table Orders
+(
+    OrderID        int auto_increment
+        primary key,
+    CustomerID     int          null,
+    OrderDate      date         null,
+    ShipDate       date         null,
+    ShipAddress    varchar(255) null,
+    ShipCity       varchar(100) null,
+    ShipPostalCode varchar(20)  null,
+    ShipCountry    varchar(100) null,
+    constraint Orders_ibfk_1
+        foreign key (CustomerID) references Customers (CustomerID)
+);
+
+create index CustomerID
+    on Orders (CustomerID);
+
+create table Suppliers
+(
+    SupplierID   int auto_increment
+        primary key,
+    SupplierName varchar(255) not null,
+    ContactName  varchar(255) null,
+    Address      varchar(255) null,
+    City         varchar(100) null,
+    PostalCode   varchar(20)  null,
+    Country      varchar(100) null,
+    Phone        varchar(20)  null
+);
+
+create table Products
+(
+    ProductID    int auto_increment
+        primary key,
+    ProductName  varchar(255)   not null,
+    SupplierID   int            null,
+    Category     varchar(100)   null,
+    UnitPrice    decimal(10, 2) null,
+    UnitsInStock int            null,
+    constraint Products_ibfk_1
+        foreign key (SupplierID) references Suppliers (SupplierID)
+);
+
+create table OrderDetails
+(
+    OrderDetailID int auto_increment
+        primary key,
+    OrderID       int            null,
+    ProductID     int            null,
+    Quantity      int            null,
+    UnitPrice     decimal(10, 2) null,
+    constraint OrderDetails_ibfk_1
+        foreign key (OrderID) references Orders (OrderID),
+    constraint OrderDetails_ibfk_2
+        foreign key (ProductID) references Products (ProductID)
+);
+
+create index OrderID
+    on OrderDetails (OrderID);
+
+create index ProductID
+    on OrderDetails (ProductID);
+
+create index SupplierID
+    on Products (SupplierID);
+
+-- Inserting data into Suppliers
+INSERT INTO Suppliers (SupplierName, ContactName, Address, City, PostalCode,
+Country, Phone) VALUES
+('WeDeliver', 'Jon Snow', '342 The Wall Road', 'Winterfell', '12341', 'Westeros',
+'127-456-7890'),
+('NatureGoods Inc', 'Jane Smith', '456 Natural Way', 'GreenVille', 'GV456',
+'Greenland', '987-654-3210'),
+('TechHub', 'Mike Johnson', '789 Tech Lane', 'TechCity', 'TC789', 'Technovia', '456-789-0123'),
+('FashionTrends', 'Emily White', '123 Fashion Street', 'StyleCity', 'SC123', 'Fashionland', '789-012-3456'),
+('HealthEssentials', 'Dr. Amanda Green', '567 Wellness Avenue', 'Fitville', 'FIT567', 'Wellnessland', '012-345-6789'),
+('FoodDeluxe', 'Chef Gordon', '876 Gourmet Road', 'CulinaryTown', 'CT876', 'Foodtopia', '321-654-9870'),
+('ElectroTech', 'Alex Spark', '234 Circuit Street', 'TechVille', 'TV234', 'Electronica', '789-012-3456'),
+('HomeComforts', 'Sarah Cozy', '987 Comfort Lane', 'Cozyville', 'CV987', 'Comfortland', '012-345-6789'),
+('GreenHarvest', 'Tom Green', '654 Eco Road', 'EcoCity', 'ECO654', 'Ecoland', '345-678-9012');
+
+-- Inserting data into Products
+INSERT INTO Products (ProductName, SupplierID, Category, UnitPrice, UnitsInStock)
+VALUES
+('Charger Cable', 3, 'Electronics', 9.99, 0),
+('Purple Mug', 2, 'Kitchen', 15.99, 0),
+('LED Desk Lamp', 3, 'Electronics', 29.99, 50),
+('Whole Grain Cereal', 4, 'Food', 4.75, 120),
+('Yoga Mat', 5, 'Fitness', 19.99, 75),
+('Smartphone Stand', 6, 'Accessories', 12.49, 100),
+('Indoor Plants Mix', 7, 'Home and Garden', 25.99, 80),
+('Stainless Steel Cooking Pot', 2, 'Kitchen', 39.99, 40),
+('Aromatherapy Essential Oils Set', 1, 'Wellness', 14.95, 90),
+('Wireless Earbuds', 3, 'Electronics', 49.99, 30),
+('Fair Trade Coffee Beans', 4, 'Beverages', 8.99, 180),
+('Fitness Tracker', 5, 'Fitness', 39.95, 60),
+('Reusable Shopping Bags Set', 6, 'Home and Garden', 5.99, 120);
+
+-- Inserting data into Customers
+INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country) VALUES
+('Eco Shopper', 'Alice Johnson', '789 Eco Ave', 'EcoTown', 'ET789', 'EcoCountry'),
+('Green Buyer', 'Bob Brown', '321 Green St', 'EcoVille', 'EV321', 'EcoLand'),
+('Healthy Living', 'Grace Smith', '456 Wellness Lane', 'WellnessCity', 'WC456', 'WellnessLand'),
+('Tech Enthusiast', 'David Techster', '567 Gadget Road', 'TechTown', 'TT567', 'TechLand'),
+('Fashionista Haven', 'Sophie Styles', '234 Chic Street', 'StyleVille', 'SV234', 'FashionLand'),
+('Fit and Active', 'Ryan Runner', '876 Fitness Ave', 'FitCity', 'FC876', 'FitLand'),
+('Gourmet Delights', 'Gina Gourmet', '987 Culinary Lane', 'CulinaryTown', 'CT987', 'FoodLand'),
+('Home Comfort Zone', 'Henry Homemaker', '543 Cozy Street', 'CozyVille', 'CV543', 'ComfortLand');
+
+-- Inserting data into Orders
+INSERT INTO Orders (CustomerID, OrderDate, ShipDate, ShipAddress, ShipCity, ShipPostalCode, ShipCountry) VALUES
+(1, '2023-11-01', '2023-11-05', '789 Eco Ave', 'EcoTown', 'ET789', 'EcoCountry'),
+(2, '2023-11-03', '2023-11-08', '321 Green St', 'EcoVille', 'EV321', 'EcoLand'),
+(3, '2023-11-05', '2023-11-10', '456 Wellness Lane', 'WellnessCity', 'WC456', 'WellnessLand'),
+(4, '2023-11-08', '2023-11-15', '567 Gadget Road', 'TechTown', 'TT567', 'TechLand'),
+(5, '2023-11-10', '2023-11-18', '234 Chic Street', 'StyleVille', 'SV234', 'FashionLand'),
+(6, '2023-11-12', '2023-11-20', '876 Fitness Ave', 'FitCity', 'FC876', 'FitLand'),
+(7, '2023-11-15', '2023-11-25', '987 Culinary Lane', 'CulinaryTown', 'CT987', 'FoodLand'),
+(8, '2023-11-18', '2023-11-28', '543 Cozy Street', 'CozyVille', 'CV543', 'ComfortLand');
+
+-- Inserting data into OrderDetails
+INSERT INTO OrderDetails (OrderID, ProductID, Quantity, UnitPrice) VALUES
+(1, 1, 2, 2.99),
+(1, 3, 1, 15.99),
+(2, 2, 1, 10.50),
+(3, 5, 3, 29.99),
+(3, 6, 2, 39.99),
+(4, 4, 1, 4.75),
+(4, 7, 1, 25.99),
+(5, 8, 2, 49.99),
+(5, 2, 1, 10.50);
+
+
+# Stored Procedures:
+# • Create a stored procedure to add a new order. This should include
+# inserting records into both the Orders and OrderDetails tables.
+
+CREATE PROCEDURE AddNewOrder(
+    IN p_CustomerID INT,
+    IN p_OrderDate DATE,
+    IN p_ShipDate DATE,
+    IN p_ShipAddress VARCHAR(255),
+    IN p_ShipCity VARCHAR(255),
+    IN p_ShipPostalCode VARCHAR(255),
+    IN p_ShipCountry VARCHAR(255),
+    IN p_ProductID INT,
+    IN p_Quantity INT,
+    IN p_UnitPrice DECIMAL(10,2)
+)
+BEGIN
+    -- Insert into Orders table
+    INSERT INTO Orders (CustomerID, OrderDate, ShipDate, ShipAddress, ShipCity, ShipPostalCode, ShipCountry)
+    VALUES (p_CustomerID, p_OrderDate, p_ShipDate, p_ShipAddress, p_ShipCity, p_ShipPostalCode, p_ShipCountry);
+
+    -- Get the ID of the newly inserted order
+    SET @last_order_id = LAST_INSERT_ID();
+
+    -- Insert into OrderDetails table
+    INSERT INTO OrderDetails (OrderID, ProductID, Quantity, UnitPrice)
+    VALUES (@last_order_id, p_ProductID, p_Quantity, p_UnitPrice);
+END;
+
+# • Develop a stored procedure to update the stock quantity of a product after
+# an order is placed.
+
+CREATE PROCEDURE UpdateStockQuantity(IN p_OrderID INT)
+BEGIN
+    -- Update the stock quantity for each product in the order
+    UPDATE Products p
+    JOIN OrderDetails od ON p.ProductID = od.ProductID
+    SET p.UnitsInStock = p.UnitsInStock - od.Quantity
+    WHERE od.OrderID = p_OrderID;
+END;
